@@ -1,0 +1,2 @@
+
+Meteor.Collection = Meds.Collection

@@ -1,0 +1,11 @@
+{
+  "name": "meds",
+  "description": "MongoDB search for Meteor",
+  "homepage": "",
+  "author": "Greg Thornton <xdissent@me.com> (http://xdissent.com)",
+  "version": "0.0.1",
+  "git": "https://github.com/xdissent/meteor-meds.git",
+  "packages": {
+    "munit": {}
+  }
+}

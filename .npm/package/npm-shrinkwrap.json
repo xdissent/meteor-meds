@@ -1,0 +1,56 @@
+{
+  "dependencies": {
+    "meds": {
+      "version": "0.2.7",
+      "dependencies": {
+        "natural": {
+          "version": "0.1.17",
+          "dependencies": {
+            "sylvester": {
+              "version": "0.0.21"
+            },
+            "apparatus": {
+              "version": "0.0.8"
+            },
+            "underscore": {
+              "version": "1.6.0"
+            }
+          }
+        },
+        "mongodb": {
+          "version": "1.4.5",
+          "dependencies": {
+            "bson": {
+              "version": "0.2.8",
+              "dependencies": {
+                "nan": {
+                  "version": "1.0.0"
+                }
+              }
+            },
+            "kerberos": {
+              "version": "0.0.3"
+            },
+            "readable-stream": {
+              "version": "1.0.27-1",
+              "dependencies": {
+                "core-util-is": {
+                  "version": "1.0.1"
+                },
+                "isarray": {
+                  "version": "0.0.1"
+                },
+                "string_decoder": {
+                  "version": "0.10.25-1"
+                },
+                "inherits": {
+                  "version": "2.0.1"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

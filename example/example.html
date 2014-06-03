@@ -1,0 +1,37 @@
+<head>
+  <title>example</title>
+</head>
+
+<body>
+  {{> search}}
+</body>
+
+<template name="search">
+  <button id="seed">Seed</button>
+  <button id="clear">Clear</button>
+  <hr />
+  <input type="text" id="query">
+  <button id="search">Search</button>
+  {{#each results}}
+    <article id="{{_id}}">
+      <h2>
+        {{name.last}}, {{name.first}}
+        {{#if birth}}<small>{{lifespan}}</small>{{/if}}
+      </h2>
+      {{#if awards}}
+        <h3>Awards</h3>
+        <ul>
+          {{#each awards}}
+            <li>
+              <h4>
+                {{award}}
+                {{#if year}}<small>({{year}})</small>{{/if}}
+              </h4>
+              {{#if by}}<p>by {{by}}</p>{{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </article>
+  {{/each}}
+</template>
