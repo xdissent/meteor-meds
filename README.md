@@ -63,6 +63,7 @@ Subscribe to the cursor on the client:
 Deps.autorun(function () {
   Meteor.subscribe('posts-search', Session.get('query'));
 });
+```
 
 
 Auto-indexing
