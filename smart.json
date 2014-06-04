@@ -1,7 +1,7 @@
 {
   "name": "meds",
   "description": "MongoDB full-text search for Meteor",
-  "homepage": "",
+  "homepage": "https://github.com/xdissent/meteor-meds",
   "author": "Greg Thornton <xdissent@me.com> (http://xdissent.com)",
   "version": "0.0.1",
   "git": "https://github.com/xdissent/meteor-meds.git",
