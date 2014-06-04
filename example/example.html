@@ -10,13 +10,15 @@
   <button id="seed">Seed</button>
   <button id="clear">Clear</button>
   <hr />
-  <input type="text" id="query">
+  <input type="text" id="query" value="{{query}}">
   <button id="search">Search</button>
   {{#each results}}
     <article id="{{_id}}">
       <h2>
         {{name.last}}, {{name.first}}
-        {{#if birth}}<small>{{lifespan}}</small>{{/if}}
+        {{#if birth}}
+          <small>({{birth.getFullYear}}-{{death.getFullYear}})</small>
+        {{/if}}
       </h2>
       {{#if awards}}
         <h3>Awards</h3>
