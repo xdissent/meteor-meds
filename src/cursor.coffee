@@ -87,14 +87,14 @@ class Meds.Cursor
     doc._meds_score = @_scores[doc._id]
     doc
 
-  _sync: =>
+  _sync: ->
     [scores, ids] = [@_scores, @_ids]
     @_scores = @query.scores()
     @_resetStats()
     added = (id for id in @_ids when id not in ids)
     removed = (id for id in ids when id not in @_ids)
     changed = (id for id in @_ids when id in ids and
-      scores[id] is not @_scores[id])
+      scores[id] isnt @_scores[id])
     @_sub.removed @name, id for id in removed
     for id in changed
       @_sub.changed @name, id, _meds_score: @_scores[id]
