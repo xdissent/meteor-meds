@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "MongoDB search for Meteor"
+  summary: "MongoDB full-text search for Meteor"
 });
 
 Npm.depends({meds: '0.2.7'});
