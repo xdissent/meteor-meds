@@ -21,9 +21,11 @@ Package.on_use(function (api, where) {
 
 Package.on_test(function(api){
   api.use(['coffeescript', 'meds', 'munit', 'sinon']);
+  api.add_files('tests/bios-collection.coffee', ['client', 'server']);
   api.add_files('tests/bios.js', ['server']);
   api.add_files('tests/mock-sub.coffee', ['server']);
   api.add_files('tests/index.coffee', ['server']);
   api.add_files('tests/cursor.coffee', ['server']);
   api.add_files('tests/cursor-remove.coffee', ['server']);
+  api.add_files('tests/client.coffee', ['client', 'server']);
 });
