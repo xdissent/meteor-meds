@@ -1,6 +1,8 @@
 meds
 ====
 
+[![Build Status](https://travis-ci.org/xdissent/meteor-meds.svg)](https://travis-ci.org/xdissent/meteor-meds)
+
 MongoDB full-text search for Meteor using
 [meds](https://github.com/xdissent/meds), a fork of
 [reds](https://github.com/visionmedia/reds).
