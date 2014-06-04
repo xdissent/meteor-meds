@@ -7,30 +7,42 @@ class Meds.IndexCollection extends Meds.Collection
     super "meds_index_#{collection._name}", options
     @__collection = collection
     @_meds = collection._meds
-    @_fields = options.index ? []
+    @_checkFields options.index
     @_observing = false
     @_observe() if options.autoindex
+
+  _checkFields: (fields) ->
+    @_fields = fields ? {}
+    @_field_names = []
+    unless typeof @_fields is 'object'
+      throw new Error 'Index option must be a mongo field specifier'
+    return unless Object.keys(@_fields).length > 0
+    inc = (field for field, inc of @_fields when inc and field isnt '_id')
+    exc = (field for field, inc of @_fields when not inc and field isnt '_id')
+    @_negate = exc.length > 0
+    if inc.length > 0 and @_negate
+      throw new Error 'Index option must be a valid mongo field specifier'
+    @_field_names = if @_negate then exc else inc
+
+  _indexedField: (field) ->
+    return false if field is '_id'
+    return true if @_field_names.length is 0
+    if @_negate then field not in @_field_names else field in @_field_names
 
   _observe: ->
     return if @_observing
     @_observing = true
-    options = {}
-    if @_fields.length > 0
-      options.fields = {}
-      options.fields[field] = true for field in @_fields
+    options = if @_field_names.length > 0 then fields: @_fields else {}
     initializing = true
     @__collection.find({}, options).observeChanges
       added: (id, doc) => @index id unless initializing
       removed: (id) => @deindex id
       changed: (id, doc) =>
-        return @index id if @_fields.length is 0
-        return @index id for field of doc when field in @_fields
+        return @index id for field of doc when @_indexedField field
     initializing = false
 
-  # XXX make fields option behave like mongo query fields option
   _words: (doc) ->
-    fields = if @_fields.length > 0 then @_fields else Object.keys doc
-    doc[field] for field in fields
+    doc[field] for field of doc when @_indexedField field
 
   _index: (id, callback) ->
     @_deindex id, (err) =>

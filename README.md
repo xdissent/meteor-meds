@@ -22,7 +22,7 @@ Usage
 Add a `search` option when creating a Meteor collection:
 
 ```js
-Posts = new Meteor.collection('posts', {search: true});
+Posts = new Meteor.Collection('posts', {search: true});
 ```
 
 Add documents to your collection and index them:
@@ -53,7 +53,7 @@ To manually publish a cursor for search results on the server:
 
 ```js
 Meteor.publish('posts-search', function (query) {
-  Posts.search(query);
+  return Posts.search(query); // Adding a `limit` option is recommended.
 });
 ```
 
@@ -63,6 +63,10 @@ Subscribe to the cursor on the client:
 Deps.autorun(function () {
   Meteor.subscribe('posts-search', Session.get('query'));
 });
+
+Template.search.results = function () {
+  return Posts.search(Session.get('query'));
+};
 ```
 
 
@@ -74,5 +78,22 @@ they are added/changed/removed. To enable auto-indexing, use the `autoindex`
 option:
 
 ```js
-Posts = new Meteor.collection('posts', {search: true, autoindex: true});
+Posts = new Meteor.Collection('posts', {search: true, autoindex: true});
+```
+
+
+Indexed Fields
+--------------
+
+By default, all document fields are indexed (except `_id`, which is *never* 
+indexed). To change this behaviour, pass a valid mongo
+[field specifier](https://docs.meteor.com/#fieldspecifiers) as the `index`
+option when creating a collection:
+
+```js
+// Index only the `title` and `content` fields:
+Posts = new Meteor.Collection('posts', {search: true, index: {title: true, content: true}});
+
+// Index all fields except the `comments` field:
+Posts = new Meteor.Collection('posts', {search: true, index: {comments: false}});
 ```
