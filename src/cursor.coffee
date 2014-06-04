@@ -7,6 +7,7 @@ class Meds.Cursor
     @search = @collection._meds
     @query = @search.query query?.trim?()
     @_resetQuery()
+    @_sorter = new Minimongo.Sorter @options.sort ? []
     @rewind()
 
   rewind: ->
@@ -43,16 +44,17 @@ class Meds.Cursor
       .sort -1
 
   _sort: (docs) ->
+    comparator = @_sorter.getComparator()
     docs.sort (a, b) =>
-      return 0 if @_scores[a._id] is @_scores[b._id]
+      return comparator a, b if @_scores[a._id] is @_scores[b._id]
       if @_scores[a._id] < @_scores[b._id] then 1 else -1
 
-  # XXX should honor fields and maybe additional sorting
-  # XXX Don't fetch query.scores() for @fetch() - won't require resorting
   _fetch: ->
     @_scores = @query.scores()
     @_resetStats()
-    @_sort (doc for doc in @collection.find(_id: $in: @_ids).fetch())
+    selector = _id: $in: @_ids
+    options = fields: @options.fields ? {}
+    @_sort (doc for doc in @collection.find(selector, options).fetch())
 
   _publishCursor: (sub) ->
     return unless @query?.str?.length > 2
