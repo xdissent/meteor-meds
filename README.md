@@ -41,10 +41,15 @@ var post = Posts.search('winner').findOne();
 console.log(post.content); // "I am teh winner"
 ```
 
-The `search` method also accepts `limit` and `skip` options:
+The `search` method also accepts `limit`, `skip`, `sort` and `fields` options:
 
 ```js
-var posts = Posts.search('winner', {limit: 3, skip: 1}).fetch();
+var posts = Posts.search('winner', {
+  limit: 3,
+  skip: 1,
+  sort: [['published', 'desc']],
+  fields: {title: true, author: true, published: true}
+}).fetch();
 ```
 
 
