@@ -66,6 +66,7 @@ class Meds.Cursor
     handle = @collection.indices.find().observeChanges
       added: @_added
       removed: @_removed
+      changed: @_changed
     @_initializing = false
     @_sub.onStop =>
       handle.stop()
@@ -152,20 +153,22 @@ class Meds.Cursor
       head = @_head()
       return unless head?
       [id, score] = [head.id, head.score]
-    @_pop() if @_hitLimit()
-    @_add id, score
+    @_addedInRange id, score
 
   _added: (id) =>
     return if @_initializing
     score = @query.score id
     return unless score > 0
     return @_addedBelow id, score if score <= @_min
-    return @_addedInRange id, score if score <= @_max
+    return @_addedInRange id, score if score < @_max
     @_addedAbove id, score
 
-  _removedInSet: (id) ->
+  _remove: (id) ->
     delete @_scores[id]
     @_sub.removed @name, id
+
+  _removedInSet: (id) ->
+    @_remove id
     return @_resetStats() unless @_hitLimit()
     tail = @_tail()
     return unless tail?
@@ -181,3 +184,31 @@ class Meds.Cursor
     # If limit is not hit, it's def above max, so shift head
     @_shift()
     @_resetStats()
+
+  _change: (id, score) ->
+    @_scores[id] = score
+    @_resetStats()
+    @_sub.changed @name, id, _meds_score: score
+
+  _replace: (id, score, replace) ->
+    return @_change id, score unless replace?
+    return @_change id, replace.score if replace.id is id
+    @_remove id
+    @_add replace.id, replace.score
+
+  _changedBelow: (id, score) ->
+    return @_change id, score unless @_hitLimit()
+    @_replace id, score, @_tail()
+
+  _changedAbove: (id, score) ->
+    return @_change id, score unless @_hasSkip()
+    @_replace id, score, @_head()
+
+  _changed: (id) =>
+    return @_added id unless id in @_ids
+    score = @query.score id
+    return if score is @_scores[id]
+    return @_removedInSet id unless score > 0
+    return @_changedBelow id, score if score <= @_min
+    return @_change id, score if score < @_max
+    @_changedAbove id, score

@@ -45,7 +45,7 @@ class Meds.IndexCollection extends Meds.Collection
     doc[field] for field of doc when @_indexedField field
 
   _index: (id, callback) ->
-    @_deindex id, (err) =>
+    @_meds.remove id, (err) =>
       return callback err if err?
       doc = @__collection.findOne _id: id
       return callback new Error 'Failed to retrieve doc for index' unless doc?
@@ -53,7 +53,7 @@ class Meds.IndexCollection extends Meds.Collection
       words = EJSON.stringify @_words doc
       @_meds.index words, id, (err) =>
         return callback err if err?
-        @insert _id: id, start: start, stop: new Date, callback
+        @upsert id, $set: start: start, stop: new Date, callback
 
   index: Meteor._wrapAsync @::_index
 

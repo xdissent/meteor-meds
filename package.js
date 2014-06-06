@@ -30,5 +30,6 @@ Package.on_test(function(api){
   api.add_files('tests/fields.coffee', ['server']);
   api.add_files('tests/cursor.coffee', ['server']);
   api.add_files('tests/cursor-remove.coffee', ['server']);
+  api.add_files('tests/cursor-change.coffee', ['server']);
   api.add_files('tests/client.coffee', ['client', 'server']);
 });

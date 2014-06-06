@@ -26,7 +26,7 @@ if Meteor.isServer
 
     tests: [
       name: 'testWaitForClientSetup'
-      timeout: 1000
+      timeout: 10000
       func: (test, done) ->
         done = done ->
         interval = Meteor.setInterval ->
